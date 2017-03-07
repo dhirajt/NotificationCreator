@@ -1,0 +1,6 @@
+# Current framework
+# https://docs.djangoproject.com/en/1.8/
+Django==1.8.17
+
+# MySQL wrapper library
+MySQL-python==1.2.5

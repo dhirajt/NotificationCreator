@@ -1,0 +1,52 @@
+{% load static %}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <meta name=viewport content="width=device-width, initial-scale=1">
+
+        <link rel="icon" href="{% static 'images/icon/favicon.ico' %}" type="image/x-icon" />
+        <title>{% block title %}Notication Management Dashboard{% endblock %}</title>
+
+
+        <link href="https://cdn.jsdelivr.net/semantic-ui/2.2.2/semantic.min.css" rel="stylesheet">
+        {% block css_includes %}
+        <!-- block to include css files -->
+        <!-- end block css files -->
+        {% endblock %}
+    </head>
+
+    {% block css %}
+        <!-- block to write custom css -->
+        <style>
+            .container {
+                height: 100%;
+            }
+        </style>
+        <!-- end block custom css -->
+    {% endblock %}
+
+    <body>
+        <div class="container">
+        {% block body %}
+        <!-- block to write body -->
+        <!-- end block body -->
+        {% endblock %}
+        </div>
+
+        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+        <script type="text/javascript" src="https://cdn.jsdelivr.net/semantic-ui/2.2.2/semantic.min.js"></script>
+
+        {% block js_includes %}
+        <!-- block to include js files -->
+        <!-- end block js files -->
+        {% endblock %}
+
+        {% block js %}
+        <!-- block to write custom js -->
+        <!-- end block custom js -->
+        {% endblock %}
+    </body>
+</html>
+
+
