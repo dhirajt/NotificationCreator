@@ -20,10 +20,10 @@ Setting Up the project
 2. Install and setup virtualenv[https://virtualenv.pypa.io/] and virtualenvwrapper[https://virtualenvwrapper.readthedocs.io/].
 
 3. Create a virutalenv and install project dependencies:
-   mkvirtualenv notifdash
-   workon notifdash
-   cd notificationdashboard
-   pip install -r requirements/dev.txt
+   - mkvirtualenv notifdash
+   - workon notifdash
+   - cd notificationdashboard
+   - pip install -r requirements/dev.txt
 
 4. Setup configuration:
    Edit config.sh with all the details as shown in config.sh.example.
@@ -32,6 +32,7 @@ Setting Up the project
 
 6. django-kronos[https://github.com/jgorset/django-kronos] is being used to periodically lookup and send notifications.
    To setup django-kronos run `python manage.py installtasks`.
+   P.S. : Unix crontab edit access is required by this command. If crontab access is denied this step will fail.
 
 7. Run `python manage.py runserver` to run the project.
 
