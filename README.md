@@ -27,7 +27,7 @@ Setting Up the project
    - pip install -r requirements/dev.txt
 
 4. Setup configuration:
-   Edit config.sh with all the details as shown in config.sh.example.
+   Edit config.sh with all the details as shown in config.sh.example and load it via `source config.sh`
 
 5. Setup database by running `python manage.py migrate`.
 
