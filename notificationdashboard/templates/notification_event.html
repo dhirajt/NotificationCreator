@@ -1,0 +1,19 @@
+<div class="event">
+  <div class="content">
+    <div class="summary">
+      {{ notification_header }}
+      <div class="date">
+        <abbr title="{{ notification_time_formatted }}">
+          {{ notification_time_string }}
+        </abbr>
+      </div>
+    </div>
+    <div class="extra text">
+      {{ notification_content }}
+    </div>
+  </div>
+  <div class="label notificationImage">
+    <img src="{{ notification_image }}">
+  </div>
+</div>
+<div class="ui divider"></div>

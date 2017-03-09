@@ -18,6 +18,7 @@ from django.conf import settings
 
 urlpatterns = [
     url(r'^$', 'dashboard.views.home'),
+    url(r'^notification/form/handler/$', 'dashboard.views.notification_form_handler', name="notification_form_handler"),
     url(r'^admin/', include(admin.site.urls)),
 ]
 

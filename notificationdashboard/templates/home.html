@@ -1,2 +1,246 @@
 {% extends "base.html" %}
 
+{% block css_includes %}
+{{ block.super }}
+<link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+<link href="https://cdn.rawgit.com/mdehoog/Semantic-UI-Calendar/76959c6f7d33a527b49be76789e984a0a407350b/dist/calendar.min.css" rel="stylesheet" type="text/css" />
+<script src="https://cdn.rawgit.com/mdehoog/Semantic-UI-Calendar/76959c6f7d33a527b49be76789e984a0a407350b/dist/calendar.min.js"></script>
+{% endblock %}
+
+{% block css %}
+{{ block.super }}
+
+<style>
+    body {
+        background-color: #f5f8fa;
+    }
+
+    .mainContent {
+        margin-top: 10px;
+    }
+
+    .ui.segment.updateSegment {
+        padding: 20px;
+    }
+
+    .ui.feed.update {
+        margin-bottom: 20px;
+    }
+
+    .extra.text{
+        max-width: none !important;
+    }
+</style>
+{% endblock %}
+
+
+{% block body %}
+    {{ block.super }}
+    <div class="ui text container mainContent">
+        <div class="ui attached icon info message tiny">
+            <i class="announcement icon"></i>
+            <div class="content">
+                <b>Notifications</b>
+            </div>
+        </div>
+        <div class="ui attached segment updateSegment clearing">
+            <div class="ui form notificationForm">
+              <div class="field">
+                <label>Header</label>
+                <input type="text" placeholder="Write a header for notification" name="header" id="header">
+              </div>
+              <div class="field">
+                <label>Content</label>
+                <textarea rows="2" placeholder="Describe the notification" name="content" id="content"></textarea>
+              </div>
+              <div class="field">
+                <label>Image URL</label>
+                <input type="text" placeholder="A valid image URL for the notification." name="image_url" id="image_url">
+              </div>
+              <div class="field">
+                  <label>Notification Time</label>
+                  <div class="ui calendar" id="notify_time">
+                    <div class="ui input left icon">
+                      <i class="calendar icon"></i>
+                      <input type="text" placeholder="Date/Time" name="notification_time" id="notification_time">
+                    </div>
+                  </div>
+              </div>
+              <div class="field">
+                <label>Query</label>
+                <input type="text" placeholder="A SQL query to get all users this notifications should be sent to." name="query" id="query">
+              </div>
+              <div class="ui error message notificationSubmitError tiny hidden">
+                    <i class="close icon"></i>
+                    <div class="header">Error</div>
+                    <p class="submissionError"></p>
+              </div>
+              <div class="ui success message notificationSubmitSuccess tiny hidden">
+                    <i class="close icon"></i>
+                    <div class="header">Success</div>
+                    <p class="message">Notification added successfully.</p>
+               </div>
+              <div class="ui small blue submit button right floated notificationFormSubmitButton">Submit</div>
+            </div>
+        </div>
+        <div class="ui update feed attached segment notificationFeed">
+          {% for notification in notifications %}
+            <div class="event">
+              <div class="content">
+                <div class="summary">
+                  {{ notification.notification_header }}
+                  <div class="date">
+                    <abbr title="{{ notification.notification_time_formatted }}">
+                      {{ notification.notification_time_string }}
+                    </abbr>
+                  </div>
+                </div>
+                <div class="extra text">
+                  {{ notification.notification_content }}
+                </div>
+              </div>
+              <div class="label notificationImage">
+                <img src="{{ notification.notification_image }}">
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+    </div>
+{% endblock %}
+
+
+{% block js_includes %}
+{{ block.super }}
+<script src="https://cdn.rawgit.com/mdehoog/Semantic-UI-Calendar/76959c6f7d33a527b49be76789e984a0a407350b/dist/calendar.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.17.1/moment.js"></script>
+{% endblock %}
+
+
+{% block js %}
+<script type="text/javascript">
+$(document).ready(function() {
+    $('#notify_time').calendar();
+
+    $('.message .close')
+        .on('click', function() {
+        $(this).closest('.message').transition('fade');
+    });
+
+    $('.notificationForm')
+      .form({
+        inline: true,
+        fields: {
+              header: {
+                rules: [
+                  {
+                    type   : 'empty',
+                    prompt : 'Please enter a header.'
+                },
+                {
+                    type   : 'minLength[20]',
+                    prompt : 'Please enter a header more than {ruleValue} characters long.'
+                },
+                {
+                    type   : 'maxLength[150]',
+                    prompt : 'Please enter a header less than {ruleValue} characters long.'
+                }
+                ]
+              },
+              content: {
+                rules: [
+                  {
+                    type   : 'empty',
+                    prompt : 'Please enter content.'
+                },
+                {
+                    type   : 'minLength[20]',
+                    prompt : 'Please enter content more than {ruleValue} characters long.'
+                },
+                {
+                    type   : 'maxLength[300]',
+                    prompt : 'Please enter content less than {ruleValue} characters long.'
+                }
+                ]
+              },
+              image_url: {
+                rules: [
+                {
+                    type   : 'empty',
+                    prompt : 'Please enter a valid image url.'
+                },
+                {
+                  type   : 'url',
+                  prompt : 'Please enter a valid url.'
+                }
+              ]
+             },
+             notification_time: {
+                rules: [
+                {
+                    type   : 'empty',
+                    prompt : 'Please enter a valid date and time.'
+                }
+              ]
+             },
+             query: {
+                rules: [
+                {
+                    type   : 'empty',
+                    prompt : 'Please enter a valid SQL query.'
+                }
+              ]
+             }
+        }
+    });
+
+    $(".notificationForm").submit(function (e){
+        e.preventDefault();
+        e.stopPropagation();
+
+        if ($('.notificationForm').form('is valid')) {
+            $.ajax({
+                action: 'submit',
+                method: 'post',
+                url: "{% url 'notification_form_handler' %}",
+                cache: false,
+                data: {
+                    'header': $('#header').val(),
+                    'content': $('#content').val(),
+                    'image_url': $('#image_url').val(),
+                    'notification_time': $('#notification_time').val(),
+                    'query': $('#query').val(),
+                    'csrfmiddlewaretoken': "{{ csrf_token }}"
+                },
+                dataType: 'json',
+                success: function(response) {
+                    $('.notificationFeed').append(response['feed_response']);
+
+                    $('.notificationSubmitError').removeClass('visible');
+                    $('.notificationSubmitError').addClass('hidden');
+
+                    $('.notificationSubmitSuccess').addClass('visible');
+
+                },
+                error: function(xhr, ajaxOptions, thrownError) {
+                    var error = jQuery.parseJSON(xhr.responseText);
+                    $('.submissionError').html(error['message']);
+
+                    $('.notificationSubmitSuccess').addClass('hidden');
+
+                    $('.notificationSubmitError').removeClass('hidden');
+                    $('.notificationSubmitError').addClass('visible');
+                },
+                beforeSend: function(){
+                    $('.notificationSubmitSuccess').addClass('visible');
+                    $('.notificationSubmitError').addClass('hidden');
+                    $(".notificationFormSubmitButton").toggleClass("loading");
+                },
+                complete: function(){
+                    $(".notificationFormSubmitButton").toggleClass("loading");
+                }
+            });
+        }
+    });
+});
+</script>
+{% endblock %}

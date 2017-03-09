@@ -1,0 +1,6 @@
+export DJANGO_SETTINGS_MODULE="notificationdashboard.settings.dev"
+export DATABASE_NAME="notification_dashboard"
+export DATABASE_USER="root"
+export DATABASE_PASSWORD="sql123"
+export DATABASE_HOST="localhost"
+export DATABASE_PORT="3306"

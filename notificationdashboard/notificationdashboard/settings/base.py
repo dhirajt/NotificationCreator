@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/dev/ref/settings/
 from os.path import abspath, basename, dirname, join, normpath
 from os import listdir
 from sys import path
-
+import os
 
 ########## PATH CONFIGURATION
 # Absolute filesystem path to the config directory:
@@ -72,14 +72,16 @@ DJANGO_APPS = (
 )
 
 THIRD_PARTY_APPS = (
+    'kronos',
 )
 
 PROJECT_APPS = (
+    'dashboard',
 )
 
 
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
-INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + PROJECT_APPS 
+INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + PROJECT_APPS
 ########## END APP CONFIGURATION
 
 
@@ -239,3 +241,4 @@ WSGI_APPLICATION = 'notificationdashboard.wsgi.application'
 TEST_RUNNER = 'django.test.runner.DiscoverRunner'
 ########## END TESTING CONFIGURATION
 
+KRONOS_PREFIX = ". %s/config.sh && " % (PROJECT_ROOT)

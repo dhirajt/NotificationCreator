@@ -4,3 +4,9 @@ Django==1.8.17
 
 # MySQL wrapper library
 MySQL-python==1.2.5
+
+# for crontabs
+django-kronos==1.0
+
+# for human readable time
+humanize==0.5.1
