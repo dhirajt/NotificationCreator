@@ -11,6 +11,7 @@ UI Framework used: http://semantic-ui.com/
 
 Datepicker Used: https://github.com/mdehoog/Semantic-UI-Calendar/
 
+Project Skeleton Adopted From: https://github.com/imkevinxu/django-kevin
 
 Setting Up the project
 ==================================
